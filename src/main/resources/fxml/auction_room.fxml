@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.auction.controller.AuctionRoomController"
+            prefHeight="720.0" prefWidth="1080.0" styleClass="root-pane">
+
+    <!-- Header Navigation -->
+    <top>
+        <HBox spacing="15" alignment="CENTER_LEFT" styleClass="header-bar">
+            <padding><Insets top="15" right="20" bottom="15" left="20"/></padding>
+            <Label text="BIDMASTER 2026" styleClass="app-title"/>
+            <Region HBox.hgrow="ALWAYS" />
+            <Label fx:id="lblUserInfo" text="User: Nguyen Van A (So du: $5,000.00)" styleClass="user-badge"/>
+            <Button fx:id="btnSwitchRole" text="Doi tai khoan" onAction="#handleSwitchRole" styleClass="secondary-btn"/>
+        </HBox>
+    </top>
+
+    <!-- Center Content: Item details and Realtime LineChart -->
+    <center>
+        <VBox spacing="15">
+            <padding><Insets top="15" right="15" bottom="15" left="20"/></padding>
+            
+            <HBox spacing="20">
+                <!-- Product Information Card -->
+                <VBox spacing="10" styleClass="card" HBox.hgrow="ALWAYS">
+                    <Label fx:id="lblItemTitle" text="MacBook Pro M3 Max 64GB" styleClass="item-name"/>
+                    <Label fx:id="lblCategorySpecs" text="[ELECTRONICS] Bao hanh: 12 thang | Brand: Apple" styleClass="item-sub"/>
+                    <Separator/>
+                    <HBox spacing="20" alignment="CENTER_LEFT">
+                        <VBox>
+                            <Label text="Gia hien tai:" styleClass="metric-label"/>
+                            <Label fx:id="lblCurrentPrice" text="\$3,450.00" styleClass="price-highlight"/>
+                        </VBox>
+                        <Separator orientation="VERTICAL"/>
+                        <VBox>
+                            <Label text="Thoi gian con lai:" styleClass="metric-label"/>
+                            <Label fx:id="lblTimer" text="01:45" styleClass="timer-badge"/>
+                        </VBox>
+                        <Separator orientation="VERTICAL"/>
+                        <VBox>
+                            <Label text="Dang dan dau:" styleClass="metric-label"/>
+                            <Label fx:id="lblTopBidder" text="Tran Thi B" styleClass="winner-label"/>
+                        </VBox>
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <!-- LineChart: Chuc nang nang cao Bid History Visualization (+0.5d) -->
+            <VBox styleClass="card" VBox.vgrow="ALWAYS">
+                <Label text="BIỂU ĐỒ DIỄN BIẾN GIÁ THEO THỜI GIAN THỰC (LINECHART JAVAFX)" styleClass="section-title"/>
+                <LineChart fx:id="chartBidHistory" createSymbols="true" legendVisible="false" VBox.vgrow="ALWAYS">
+                    <xAxis>
+                        <CategoryAxis label="Thoi gian luot dat" />
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis label="Gia (USD)" />
+                    </yAxis>
+                </LineChart>
+            </VBox>
+        </VBox>
+    </center>
+
+    <!-- Right Sidebar: Live Bidding Actions & Auto-Bid -->
+    <right>
+        <VBox spacing="15" prefWidth="360.0" styleClass="sidebar">
+            <padding><Insets top="15" right="20" bottom="15" left="10"/></padding>
+            
+            <!-- Bid Input Card -->
+            <VBox spacing="10" styleClass="card">
+                <Label text="ĐẶT GIÁ TRỰC TIẾP (CONCURRENCY SAFE)" styleClass="section-title"/>
+                <HBox spacing="10" alignment="CENTER">
+                    <TextField fx:id="txtBidAmount" promptText="Nhap so tien..." HBox.hgrow="ALWAYS" styleClass="input-field"/>
+                    <Button fx:id="btnPlaceBid" text="ĐẶT GIÁ" onAction="#handlePlaceBid" styleClass="primary-btn"/>
+                </HBox>
+                <HBox spacing="5">
+                    <Button text="+$50" onAction="#handleQuickBid50" styleClass="quick-btn"/>
+                    <Button text="+$100" onAction="#handleQuickBid100" styleClass="quick-btn"/>
+                    <Button text="+$250" onAction="#handleQuickBid250" styleClass="quick-btn"/>
+                </HBox>
+            </VBox>
+
+            <!-- Auto-Bid Card (+0.5d) -->
+            <VBox spacing="10" styleClass="card">
+                <Label text="CẤU HÌNH AUTO-BID (+0.5đ)" styleClass="section-title"/>
+                <TextField fx:id="txtMaxBid" promptText="Gia toi da (Max Bid)..." styleClass="input-field"/>
+                <TextField fx:id="txtIncrement" promptText="Buoc gia (Increment)..." styleClass="input-field"/>
+                <Button text="BẬT TỰ ĐỘNG ĐẤU GIÁ" onAction="#handleActivateAutoBid" styleClass="accent-btn" maxWidth="Infinity"/>
+            </VBox>
+
+            <!-- Transaction History Table -->
+            <VBox spacing="10" styleClass="card" VBox.vgrow="ALWAYS">
+                <Label text="LỊCH SỬ ĐẶT GIÁ GẦN ĐÂY" styleClass="section-title"/>
+                <TableView fx:id="tableBids" VBox.vgrow="ALWAYS">
+                    <columns>
+                        <TableColumn fx:id="colBidder" text="Người đặt" prefWidth="120.0" />
+                        <TableColumn fx:id="colAmount" text="Giá ($)" prefWidth="100.0" />
+                        <TableColumn fx:id="colTime" text="Thời gian" prefWidth="100.0" />
+                    </columns>
+                </TableView>
+            </VBox>
+        </VBox>
+    </right>
+</BorderPane>
